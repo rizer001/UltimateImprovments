@@ -38,6 +38,7 @@ public class AccessListCheckTask extends BukkitRunnable {
         int interval = plugin.getConfig().getInt("access_control.check_interval_ticks", 20);
         if (interval <= 0) {
             ConsoleLogger.info("[AccessCheck] Periodic check disabled (interval <= 0).");
+            taskId = -1;
             return;
         }
 

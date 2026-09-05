@@ -84,7 +84,7 @@ public class VoteManager {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
                     String voteName = rs.getString("vote_name");
-                    Vote vote = votes.get(voteName);
+                    Vote vote = votes.get(voteName.toLowerCase());
                     if (vote == null) continue;
                     int idx = rs.getInt("answer_index");
                     Answer a = new Answer();
@@ -101,7 +101,7 @@ public class VoteManager {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
                     String voteName = rs.getString("vote_name");
-                    Vote vote = votes.get(voteName);
+                    Vote vote = votes.get(voteName.toLowerCase());
                     if (vote == null) continue;
                     UUID playerUuid = UUID.fromString(rs.getString("player_uuid"));
                     int answerIndex = rs.getInt("answer_index");
@@ -777,13 +777,14 @@ public class VoteManager {
     // =========================
     private static void scheduleClose(String voteName, long delayMillis) {
         long delayTicks = Math.max(1, delayMillis / 50);
+        String key = voteName.toLowerCase();
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
-                closeVote(voteName);
+                closeVote(key);
             }
         }.runTaskLater(Main.getInstance(), delayTicks);
-        closeTimers.put(voteName, task);
+        closeTimers.put(key, task);
     }
 
     // =========================
